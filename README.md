@@ -4,6 +4,20 @@ Simple custom GPU fan curve daemon for NVIDIA cards on Linux using `nvidia-setti
 
 Tested on Ubuntu 25 with a GTX 1070 Ti.
 
+## One-Line Install (No GitHub Account Needed)
+
+This runs directly from GitHub and installs everything:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/aschiebold/Ubuntu-25-nvidia-GPU-fan-controller/main/install-from-web.sh | sudo bash
+```
+
+Then check logs:
+
+```bash
+journalctl -u nvidia-fan-curve.service -f
+```
+
 ## Quick Start (Copy/Paste)
 
 From this repository directory:
@@ -19,20 +33,6 @@ To uninstall:
 
 ```bash
 sudo ./uninstall.sh
-```
-
-## One-Line Install (No GitHub Account Needed)
-
-This runs directly from GitHub and installs everything:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/aschiebold/Ubuntu-25-nvidia-GPU-fan-controller/main/install-from-web.sh | sudo bash
-```
-
-Then check logs:
-
-```bash
-journalctl -u nvidia-fan-curve.service -f
 ```
 
 ## Requirements
