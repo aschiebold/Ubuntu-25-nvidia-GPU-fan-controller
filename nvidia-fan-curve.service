@@ -1,0 +1,15 @@
+[Unit]
+Description=NVIDIA fan curve daemon
+After=display-manager.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/bin/bash -lc 'set -euo pipefail; export DISPLAY=:0; XAUTH=$(ls /run/user/1000/.mutter-Xwaylandauth.* 2>/dev/null | sed -n "1p"); [ -n "$XAUTH" ] || { echo "No Xwayland auth file found"; exit 1; }; export XAUTHORITY="$XAUTH"; exec /usr/local/bin/nvidia-fan-curve.sh'
+Restart=always
+RestartSec=3
+StartLimitIntervalSec=120
+StartLimitBurst=20
+
+[Install]
+WantedBy=multi-user.target
