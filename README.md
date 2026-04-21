@@ -43,10 +43,22 @@ Edit curve points if needed:
 
 ## Fan Curve Tuning (Easy Mode)
 
-Open the script:
+Find which script path your service is using:
+
+```bash
+systemctl cat nvidia-fan-curve.service | sed -n '/ExecStart/p'
+```
+
+If your service uses `/usr/local/bin/nvidia-fan-curve.sh`, edit it with:
 
 ```bash
 sudo nano /usr/local/bin/nvidia-fan-curve.sh
+```
+
+If your service uses `/home/<your-user>/.local/bin/nvidia-fan-curve.sh`, edit it with:
+
+```bash
+sudo nano /home/<your-user>/.local/bin/nvidia-fan-curve.sh
 ```
 
 Edit this block:
@@ -146,5 +158,6 @@ Then reboot or restart your display manager.
 ## Notes
 
 - The provided service uses `/run/user/1000/.mutter-Xwaylandauth.*` by default. Change `1000` if your UID differs.
+- This repo's service file points to `/usr/local/bin/nvidia-fan-curve.sh`; if you customized `ExecStart` (for example to `~/.local/bin`), edit that same path when tuning.
 - This was built for single-GPU systems. For multi-GPU, adjust `GPU_INDEX` and `FAN_INDEX`.
 - Run at your own risk. Monitor thermals after changing the curve.
