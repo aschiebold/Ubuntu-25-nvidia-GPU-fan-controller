@@ -21,6 +21,20 @@ To uninstall:
 sudo ./uninstall.sh
 ```
 
+## One-Line Install (No GitHub Account Needed)
+
+This runs directly from GitHub and installs everything:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/aschiebold/Ubuntu-25-nvidia-GPU-fan-controller/main/install-from-web.sh | sudo bash
+```
+
+Then check logs:
+
+```bash
+journalctl -u nvidia-fan-curve.service -f
+```
+
 ## Requirements
 
 - NVIDIA proprietary driver installed
