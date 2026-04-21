@@ -9,15 +9,17 @@ Tested on Ubuntu 25 with a GTX 1070 Ti.
 From this repository directory:
 
 ```bash
-sudo install -m 755 nvidia-fan-curve.sh /usr/local/bin/nvidia-fan-curve.sh
-sudo install -m 644 nvidia-fan-curve.service /etc/systemd/system/nvidia-fan-curve.service
-sudo systemctl daemon-reload
-sudo systemctl enable --now nvidia-fan-curve.service
-sudo systemctl status nvidia-fan-curve.service --no-pager
-journalctl -u nvidia-fan-curve.service -f
+chmod +x install.sh uninstall.sh
+sudo ./install.sh
 ```
 
 If the service starts and logs lines like `temp=53C speed=53%`, it is working.
+
+To uninstall:
+
+```bash
+sudo ./uninstall.sh
+```
 
 ## Requirements
 
@@ -40,6 +42,7 @@ Edit curve points if needed:
 - `MIN_SPEED`
 - `MAX_SPEED`
 - `POLL_SECONDS`
+- `HYSTERESIS_PERCENT` (default `2`, set to `0` to disable)
 
 ## Fan Curve Tuning (Easy Mode)
 
@@ -81,6 +84,7 @@ Format is `"TEMP_C:FAN_PERCENT"`.
 - Lower fan percent at a temp = quieter GPU, more heat
 - Keep temps increasing top-to-bottom
 - Keep fan speeds increasing top-to-bottom
+- Keep `HYSTERESIS_PERCENT` at `1-3` to avoid fan speed bouncing
 
 Then restart:
 
@@ -131,6 +135,21 @@ View logs:
 
 ```bash
 journalctl -u nvidia-fan-curve.service -f
+```
+
+## Install/Uninstall Scripts
+
+Install:
+
+```bash
+chmod +x install.sh uninstall.sh
+sudo ./install.sh
+```
+
+Uninstall:
+
+```bash
+sudo ./uninstall.sh
 ```
 
 ## 3) CoolBits example

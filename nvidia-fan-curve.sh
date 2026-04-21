@@ -21,6 +21,9 @@ CURVE_POINTS=(
 # Clamp
 MIN_SPEED=25
 MAX_SPEED=100
+# Only apply a new fan speed when this many percent differs.
+# Set to 0 to disable hysteresis.
+HYSTERESIS_PERCENT=2
 
 get_temp() {
   /usr/bin/nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits -i "$GPU_INDEX" | tr -d '[:space:]'
@@ -76,9 +79,15 @@ trap cleanup EXIT INT TERM
 # Enable manual mode once
 /usr/bin/nvidia-settings -a "[gpu:${GPU_INDEX}]/GPUFanControlState=1" >/dev/null
 
+last_applied_speed=""
 while true; do
   temp="$(get_temp)"
   speed="$(interp_speed "$temp")"
-  apply_speed "$speed"
+  if [[ -z "$last_applied_speed" ]] || (( speed > last_applied_speed + HYSTERESIS_PERCENT )) || (( speed < last_applied_speed - HYSTERESIS_PERCENT )); then
+    apply_speed "$speed"
+    last_applied_speed="$speed"
+  else
+    echo "$(date +'%F %T') temp=${temp}C speed=${last_applied_speed}% (held by hysteresis)"
+  fi
   sleep "$POLL_SECONDS"
 done
