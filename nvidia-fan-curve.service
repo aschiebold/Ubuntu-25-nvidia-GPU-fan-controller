@@ -1,7 +1,7 @@
 [Unit]
 Description=NVIDIA fan curve daemon
-After=display-manager.service graphical.target nvidia-persistenced.service
-Wants=graphical.target nvidia-persistenced.service
+After=display-manager.service nvidia-persistenced.service
+Wants=nvidia-persistenced.service
 OnFailure=nvidia-fan-curve-failure.service
 
 [Service]
