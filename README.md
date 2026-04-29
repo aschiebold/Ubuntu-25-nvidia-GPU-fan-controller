@@ -141,6 +141,8 @@ Install service:
 
 ```bash
 sudo install -m 644 nvidia-fan-curve.service /etc/systemd/system/nvidia-fan-curve.service
+sudo install -m 644 nvidia-fan-curve-failure.service /etc/systemd/system/nvidia-fan-curve-failure.service
+sudo install -m 755 nvidia-fan-curve-onfailure.sh /usr/local/sbin/nvidia-fan-curve-onfailure.sh
 sudo systemctl daemon-reload
 sudo systemctl enable --now nvidia-fan-curve.service
 ```
@@ -187,10 +189,12 @@ Then reboot or restart your display manager.
 - `The control display is undefined`: X auth/display are not available to the service yet; ensure graphical session is up and retry.
 - Fan changes work manually with `sudo` but not service: check `sudo systemctl status nvidia-fan-curve.service` and `journalctl -u nvidia-fan-curve.service -n 100`.
 - No logs or no service: run `sudo systemctl daemon-reload` then `sudo systemctl enable --now nvidia-fan-curve.service`.
+- Need a one-line failure summary: `journalctl -t nvidia-fan-curve-onfailure -n 20 --no-pager`.
 
 ## Notes
 
 - The provided service uses `/run/user/1000/.mutter-Xwaylandauth.*` by default. Change `1000` if your UID differs.
 - This repo's service file points to `/usr/local/bin/nvidia-fan-curve.sh`; if you customized `ExecStart` (for example to `~/.local/bin`), edit that same path when tuning.
+- The service waits up to 60 seconds for X auth/display readiness before starting and logs a concise hint on failure via `OnFailure=`.
 - This was built for single-GPU systems. For multi-GPU, adjust `GPU_INDEX` and `FAN_INDEX`.
 - Run at your own risk. Monitor thermals after changing the curve.

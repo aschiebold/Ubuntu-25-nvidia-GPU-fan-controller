@@ -1,0 +1,6 @@
+[Unit]
+Description=Log concise failure reason for nvidia-fan-curve.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/nvidia-fan-curve-onfailure.sh

@@ -1,13 +1,18 @@
 [Unit]
 Description=NVIDIA fan curve daemon
-After=display-manager.service
+After=display-manager.service graphical.target nvidia-persistenced.service
+Wants=graphical.target nvidia-persistenced.service
+OnFailure=nvidia-fan-curve-failure.service
 
 [Service]
 Type=simple
 User=root
-ExecStart=/bin/bash -lc 'set -euo pipefail; export DISPLAY=:0; XAUTH=$(ls /run/user/1000/.mutter-Xwaylandauth.* 2>/dev/null | sed -n "1p"); [ -n "$XAUTH" ] || { echo "No Xwayland auth file found"; exit 1; }; export XAUTHORITY="$XAUTH"; exec /usr/local/bin/nvidia-fan-curve.sh'
+Environment=DISPLAY=:0
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+ExecStartPre=/bin/bash -lc 'set -euo pipefail; for i in {1..30}; do XAUTH=$(ls /run/user/1000/.mutter-Xwaylandauth.* 2>/dev/null | sed -n "1p" || true); if [ -n "$XAUTH" ] && DISPLAY=:0 XAUTHORITY="$XAUTH" /usr/bin/nvidia-settings -q [gpu:0]/GPUFanControlState >/dev/null 2>&1; then echo "X display/auth ready: $XAUTH"; exit 0; fi; sleep 2; done; echo "X display/auth not ready after 60s"; exit 1'
+ExecStart=/bin/bash -lc 'set -euo pipefail; XAUTH=$(ls /run/user/1000/.mutter-Xwaylandauth.* 2>/dev/null | sed -n "1p"); [ -n "$XAUTH" ] || { echo "No Xwayland auth file found"; exit 1; }; export DISPLAY=:0; export XAUTHORITY="$XAUTH"; exec /usr/local/bin/nvidia-fan-curve.sh'
 Restart=always
-RestartSec=3
+RestartSec=5
 StartLimitIntervalSec=120
 StartLimitBurst=20
 

@@ -9,7 +9,9 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 install -m 755 "${SCRIPT_DIR}/nvidia-fan-curve.sh" /usr/local/bin/nvidia-fan-curve.sh
+install -m 755 "${SCRIPT_DIR}/nvidia-fan-curve-onfailure.sh" /usr/local/sbin/nvidia-fan-curve-onfailure.sh
 install -m 644 "${SCRIPT_DIR}/nvidia-fan-curve.service" /etc/systemd/system/nvidia-fan-curve.service
+install -m 644 "${SCRIPT_DIR}/nvidia-fan-curve-failure.service" /etc/systemd/system/nvidia-fan-curve-failure.service
 
 systemctl daemon-reload
 systemctl enable --now nvidia-fan-curve.service
