@@ -2,7 +2,7 @@
 
 Simple custom GPU fan curve daemon for NVIDIA cards on Linux using `nvidia-settings`.
 
-Tested on Ubuntu 25 with a GTX 1070 Ti.
+Tested on Ubuntu 25 & 26 with a GTX 1070 Ti.
 
 ## One-Line Install (No GitHub Account Needed)
 
