@@ -1,0 +1,17 @@
+[Unit]
+Description=NVIDIA fan curve daemon (headless, session-independent)
+After=nvidia-persistenced.service systemd-logind.service
+Wants=nvidia-persistenced.service
+# The daemon self-heals and never exits on a missing display, so rate limiting
+# would only get in the way. Disable it.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/nvidia-fan-curve.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

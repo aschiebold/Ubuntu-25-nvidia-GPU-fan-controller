@@ -1,0 +1,9 @@
+# editor / OS cruft
+*~
+*.swp
+.DS_Store
+
+# local backups created by the installer
+*.bak
+*.bak.*
+*.new
